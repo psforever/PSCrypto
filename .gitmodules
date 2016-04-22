@@ -1,0 +1,3 @@
+[submodule "external/psf-cryptopp"]
+	path = external/psf-cryptopp
+	url = https://github.com/psforever/psf-cryptopp.git
