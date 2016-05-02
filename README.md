@@ -2,7 +2,7 @@
 A wrapper around CryptoPP for use with Scala or Java.
 
 ```shell
-$ git clone --recursive https://github.com/psforever/psf-cryptopp.git
+$ git clone --recursive https://github.com/psforever/PSCrypto.git
 ```
 
 Or if you already cloned without getting the submodules
