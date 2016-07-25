@@ -11,7 +11,8 @@ STRIP := $(PREFIX)strip
 gcc_machine := $(subst -, ,$(shell $(CC) -dumpmachine))
 
 GCC_ARCH := $(word 1,$(gcc_machine))
-OS := $(word 3,$(gcc_machine))
+OS1 := $(word 2,$(gcc_machine))
+OS2 := $(word 3,$(gcc_machine))
 
 ifeq "$(ARCH)" ""
   ifeq "$(GCC_ARCH)" ""
@@ -51,8 +52,14 @@ else
   ARCH := $(GCC_ARCH)
 endif
 
-ifeq ($(findstring $(OS), linux cygwin mingw32),)
-$(error "Unsupported operating system $(OS)")
+ifeq ($(findstring $(OS1), linux cygwin mingw32),)
+  ifeq ($(findstring $(OS2), linux cygwin mingw32),)
+    $(error "Unsupported operating system $(OS1), $(OS2)")
+  else
+    OS := $(OS2)
+  endif
+else
+  OS := $(OS1)
 endif
 
 # Output artifact functions
