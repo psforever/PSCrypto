@@ -1,10 +1,14 @@
 // PSCrypto - PSForever
 // https://cryptopp.com/wiki/Diffie-Hellman
 
-#ifdef BUILD_DLL
-#define DLL_EXPORT extern "C" __declspec(dllexport)
+#if defined(_WIN32) || defined(__CYGWIN__)
+# ifdef BUILD_DLL
+#  define DLL_EXPORT extern "C" __declspec(dllexport)
+# else
+#  define DLL_EXPORT extern "C" __declspec(dllimport)
+# endif
 #else
-#define DLL_EXPORT extern "C" __declspec(dllimport)
+# define DLL_EXPORT extern "C"
 #endif
 
 #include "osrng.h"
