@@ -66,65 +66,27 @@ using CryptoPP::SecByteBlock;
 #include <iomanip>
 using namespace std;
 
-DLL_EXPORT DH * DH_Start(const byte * p, const byte * g, byte * privKey, byte * pubKey);
-bool ValidateMD5MAC();
+#include "pscrypto.h"
 
 #define min(x, y) (((x) > (y)) ? (y) : (x))
 
-/*key = "377b60f8790f91b35a9da82945743da9"
-label = "master secret"
-msg = "b4aea1559444a20b6112a2892de40eac00000000c8aea155b53d187076b79abab59001b600000000"
-#msg = ""
-expect = "5aa15de41f5220cf5cca489155e1438c5aa15de4"
-
-print "Key: " + key
-print "Msg: " + msg
-
-# append the label
-msg = label + hexToBin(msg)*/
-
-int main(int argc, char* argv[])
+DLL_EXPORT bool PSCrypto_Init(int major, int minor)
 {
-        DH dh;
-	AutoSeededRandomPool rnd(0x128);
+  return PSCRYPTO_VERSION_MAJOR == major && PSCRYPTO_VERSION_MINOR == minor;
+}
 
-	cout << "Generating parameters..." << endl;
-	dh.AccessGroupParameters().Initialize(rnd, 128);
-	// for server, we are given p and g
-	// use this: dh.AccessGroupParameters().Initialize(p, g);
+DLL_EXPORT void PSCrypto_Get_Version(int * major, int * minor)
+{
+  if(major && minor)
+  {
+    *major = PSCRYPTO_VERSION_MAJOR;
+    *minor = PSCRYPTO_VERSION_MINOR;
+  }
+}
 
-	cout << "Generating Keypair..." << endl;
-	
-	SecByteBlock privKey(dh.PrivateKeyLength());
-	SecByteBlock pubKey(dh.PublicKeyLength());
-	dh.GenerateKeyPair(rnd, privKey, pubKey);
-
-	const Integer& p = dh.GetGroupParameters().GetModulus();
-	cout << "P: " << hex << p << endl;
-
-	Integer q = (p-1)/2;
-	cout << "Q: " << q << endl;
-
-	const Integer& g = dh.GetGroupParameters().GetGenerator();
-	cout << "G: " << g << endl;
-
-	Integer r = dh.GetGroupParameters().GetSubgroupOrder();
-	cout << "Subgroup order: " << r << endl;
-
-	cout << "Key generation test..." << endl;
-
-	byte buf1[16] = {
-			'a','a','b','b',
-			'a','a','b','b',
-			'a','a','b','b',
-			'a','a','b','c'};
-	byte buf2[16];
-	byte buf3[16];
-
-
-	cout << "Output " << DH_Start(buf1, buf1, buf2, buf3) << endl;
-
-	return 0;
+DLL_EXPORT const char * PSCrypto_Version_String()
+{
+  return PSCRYPTO_VERSION_STRING;
 }
 
 DLL_EXPORT DH * DH_Start(const byte * p, const byte * g, byte * privKey, byte * pubKey)
@@ -292,7 +254,7 @@ DLL_EXPORT void MD5Test()
 
 }
 
-void HMACTest()
+static void HMACTest()
 {
 	AutoSeededRandomPool prng;
 
@@ -340,7 +302,7 @@ void HMACTest()
 	}
 }
 
-bool ValidateMD5MAC()
+static bool ValidateMD5MAC()
 {
 	const byte keys[2][MD5MAC::KEYLENGTH]={
 		{0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff},
@@ -398,4 +360,60 @@ bool ValidateMD5MAC()
 	}
 
 	return pass;
+}
+
+/*key = "377b60f8790f91b35a9da82945743da9"
+label = "master secret"
+msg = "b4aea1559444a20b6112a2892de40eac00000000c8aea155b53d187076b79abab59001b600000000"
+#msg = ""
+expect = "5aa15de41f5220cf5cca489155e1438c5aa15de4"
+
+print "Key: " + key
+print "Msg: " + msg
+
+# append the label
+msg = label + hexToBin(msg)*/
+
+int main(int argc, char* argv[])
+{
+        DH dh;
+	AutoSeededRandomPool rnd(0x128);
+
+	cout << "Generating parameters..." << endl;
+	dh.AccessGroupParameters().Initialize(rnd, 128);
+	// for server, we are given p and g
+	// use this: dh.AccessGroupParameters().Initialize(p, g);
+
+	cout << "Generating Keypair..." << endl;
+	
+	SecByteBlock privKey(dh.PrivateKeyLength());
+	SecByteBlock pubKey(dh.PublicKeyLength());
+	dh.GenerateKeyPair(rnd, privKey, pubKey);
+
+	const Integer& p = dh.GetGroupParameters().GetModulus();
+	cout << "P: " << hex << p << endl;
+
+	Integer q = (p-1)/2;
+	cout << "Q: " << q << endl;
+
+	const Integer& g = dh.GetGroupParameters().GetGenerator();
+	cout << "G: " << g << endl;
+
+	Integer r = dh.GetGroupParameters().GetSubgroupOrder();
+	cout << "Subgroup order: " << r << endl;
+
+	cout << "Key generation test..." << endl;
+
+	byte buf1[16] = {
+			'a','a','b','b',
+			'a','a','b','b',
+			'a','a','b','b',
+			'a','a','b','c'};
+	byte buf2[16];
+	byte buf3[16];
+
+
+	cout << "Output " << DH_Start(buf1, buf1, buf2, buf3) << endl;
+
+	return 0;
 }

@@ -1,6 +1,12 @@
+include Makefile.inc
+
+$(info === Build configuration ===)
+$(info Archtecture: $(ARCH))
+$(info Operating system: $(OS))
+
 CRYPTOPP_DIR=external/psf-cryptopp
 CRYPTOPP_LIB=$(CRYPTOPP_DIR)/libcryptopp.a
-PSCRYPTO=pscrypto/pscrypto.dll
+PSCRYPTO=pscrypto/$(call lib-name,pscrypto)
 
 all : $(CRYPTOPP_LIB) $(PSCRYPTO)
 
@@ -13,3 +19,5 @@ $(PSCRYPTO) : $(CRYPTOPP_LIB)
 clean :
 	$(MAKE) -C pscrypto/ clean
 	$(MAKE) -C $(CRYPTOPP_DIR) clean
+
+.PHONY : all clean

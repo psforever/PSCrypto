@@ -1,17 +1,26 @@
+include ../Makefile.inc
+
+#### Sources
 SRCS = pscrypto.cpp
 OBJS := $(SRCS:.cpp=.o)
 
-# TODO: this needs to be fixed for linux
-LIB = pscrypto.dll
-TEST = pscrypto
+#### Artifacts
+OUT_NAME=pscrypto
+LIB = $(call lib-name,$(OUT_NAME))
+TEST = $(call exe-name,$(OUT_NAME))
 
-AR = $(PREFIX)ar
-CXX = $(PREFIX)g++
-LD = $(PREFIX)g++
-STRIP = $(PREFIX)strip
+#### Flags
+CXXFLAGS := $(CFLAGS) -DBUILD_DLL -I../external/psf-cryptopp
+LDFLAGS := -L../external/psf-cryptopp
 
-CXXFLAGS := $(CFLAGS) -DBUILD_DLL -I../external/psf-cryptopp -fPIC
-LDFLAGS := -L../external/psf-cryptopp -static-libgcc -static-libstdc++
+# Handle OS compiler quirks
+ifeq "$(OS)" "mingw32"
+  LDFLAGS := $(LDFLAGS) -static-libgcc -static-libstdc++
+else ifeq "$(OS)" "cygwin"
+  LDFLAGS := $(LDFLAGS) -static-libgcc -static-libstdc++
+else
+  CXXFLAGS := $(CXXFLAGS) -fPIC
+endif
 
 ifdef DEBUG
 CXXFLAGS += -g
@@ -22,7 +31,12 @@ endif
 LIB_FLAGS=$(LDFLAGS) -Wl,-soname=$(LIB)
 LIBS=-lcryptopp
 
-all : $(OBJS) $(LIB) $(TEST)
+#### Recipes
+
+all : $(OBJS) $(LIB)
+
+test : all $(TEST)
+	./$(TEST)
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -40,4 +54,6 @@ ifndef DEBUG
 endif
 
 clean :
-	rm -f $(OBJS) $(LIB) *.pyc
+	rm -f $(OBJS) $(LIB) $(TEST) *.pyc
+
+.PHONY : all test clean
