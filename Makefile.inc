@@ -20,8 +20,10 @@ ifeq "$(ARCH)" ""
   endif
 endif
 
-ifeq "$(OS)" ""
-$(error "Unable to determine operating system")
+ifeq "$(OS1)" ""
+  ifeq "$(OS2)" ""
+    $(error "Unable to determine operating system")
+  endif
 endif
 
 # Consolidate the GCC architecture value.
