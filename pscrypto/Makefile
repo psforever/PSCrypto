@@ -4,6 +4,10 @@ include ../Makefile.inc
 SRCS = pscrypto.cpp
 OBJS := $(SRCS:.cpp=.o)
 
+ifneq ($(findstring $(OS), cygwin mingw32),)
+  OBJS += resource.o
+endif
+
 #### Artifacts
 OUT_NAME=pscrypto
 LIB = $(call lib-name,$(OUT_NAME))
@@ -41,8 +45,12 @@ test : all $(TEST)
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+# For windows, create a resource section
+resource.o : resource.rc
+	$(PREFIX)windres -i $< -o $@
+
 $(LIB) : $(OBJS)
-	$(CXX) -shared $< -o $(LIB) $(LIB_FLAGS) $(LIBS)
+	$(CXX) -shared $(OBJS) -o $(LIB) $(LIB_FLAGS) $(LIBS)
 ifndef DEBUG
 	$(STRIP) $(LIB)
 endif
