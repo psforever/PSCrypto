@@ -23,9 +23,9 @@ else
 endif
 
 ifdef DEBUG
-CXXFLAGS += -g
+CXXFLAGS += -g -std=c++03
 else
-CXXFLAGS += -O2 -DNDEBUG
+CXXFLAGS += -O2 -DNDEBUG -std=c++03
 endif
 
 LIB_FLAGS=$(LDFLAGS) -Wl,-soname=$(LIB)
