@@ -75,3 +75,6 @@ else
   lib-name = lib$(1).so
   exe-name = $(1)
 endif
+
+export OS
+export ARCH

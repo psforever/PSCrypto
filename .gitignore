@@ -6,3 +6,7 @@
 *.pyc
 *.stackdump
 .gdb_history
+
+# Build artifacts
+build-log*
+pscrypto-lib
