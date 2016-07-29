@@ -33,3 +33,23 @@ $ PREFIX=x86_64-w64-mingw32- make -j4
 This will build a `pscrypto.dll` for 64-bit Windows. Platform and architecture quirks are handled by the file `Makefile.inc`.
 
 You can also specify the `ARCH` variable manually (as `i686` or `x86_64`) in order to enable multilib building, if available.
+
+## Releasing Code
+You are able to create a release on a Linux 64-bit system with the MingW64 compiler toolchain installed. The prefixes required to build are
+
+```
+x86_64-w64-mingw32-
+i686-w64-mingw32-
+x86_64-linux-gnu-
+```
+
+Check out [the script to build a release](scripts/build.sh).
+
+### Release Checklist
+
+* Everything builds correctly
+* Version has been bumped in [pscrypto/pscrypto.h](pscrypto/pscrypto.h) and in the Windows resource file [pscrypto/resource.rc](pscrypto/resource.rc)
+* A release can be made with the build script
+* Release notes have been updated
+* All external references and this repository are tagged with attached release binaries
+* Update links (travis, other readmes) to point to the latest release

@@ -1,0 +1,8 @@
+Version 1.1
+===========
+* Minor fix on Unix systems. /dev/random was being defaulted to, causing the
+  entropy pool to run out, blocking library users. /dev/urandom now default
+
+Version 1.0
+===========
+* Initial release with PlanetSide crypto functionality

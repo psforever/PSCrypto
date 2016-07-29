@@ -3,7 +3,7 @@ from binascii import hexlify
 from ctypes import *
 import os
 
-lib = cdll.LoadLibrary(os.path.dirname(os.path.realpath(__file__)) + "/pscrypto.dll")
+lib = cdll.LoadLibrary(os.path.dirname(os.path.realpath(__file__)) + "/libpscrypto.so")
 
 lib.MD5_MAC.restype = c_bool
 lib.MD5_MAC.prototype = [c_char_p, c_uint, c_char_p, c_uint, c_char_p, c_uint]
@@ -75,7 +75,6 @@ def ServerEnc(encHandle, pt):
     return ct.raw
 
 def main():
-    raw_input()
     (dhHandle, priv, pub) = ServerDHStart("\x41\x75"*8, "\x01"*15 + "\x03")
     print "Started"
     print ServerDHAgree(dhHandle, priv, "A"*16)
