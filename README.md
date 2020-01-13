@@ -1,5 +1,5 @@
 # PSCrypto
-A PlanetSide specific wrapper around CryptoPP for use with Scala, Java, C++ or C. These functions are used for establishing an authenticated and confidential connection between a PlanetSide server and client.
+A PlanetSide specific wrapper around CryptoPP for use with Scala, Java, C++ or C. These functions are used for [establishing an authenticated and confidential connection](https://github.com/psforever/PSF-LoginServer/blob/master/pslogin/src/main/scala/CryptoSessionActor.scala) between a PlanetSide server and client.
 
 To get the library, run
 
@@ -14,9 +14,9 @@ git submodule update --init --recursive
 ```
 
 ## Why is this library necessary?
-PlanetSide uses an older version of a cryptographic library called CryptoPP (Crypto++). It uses this for encrypting, decrypting, and authenticating _all_ login and world packets. Some of the algorithms used by PlanetSide are depreciated and no longer used for modern crypto. This means that implementations of the algorithms are hard to find.
+PlanetSide uses an older version of a cryptographic library called CryptoPP (Crypto++). It uses this for encrypting, decrypting, and authenticating _all_ login and world packets. Some of the algorithms used by PlanetSide are depreciated and no longer used for modern crypto (read: insecure). This means that implementations of some algorithms (e.g., MD5MAC) are hard to find.
 
-What we have done is figured out the last known version of CryptoPP that used some of these algorithms, forked it, made it compile, and wrapped it so it could be easily called from server code, which is in Scala. It's possible that these old algorithms could be recreated for new modern code, but this was the easiest option and it closely matched what PlanetSide was doing for crypto.
+What we have done is figured out the last known version of CryptoPP that used some of these algorithms, forked it, made it compile, and wrapped it so it could be easily called from server code, which is in Scala. It's possible that these old algorithms could be recreated for new modern code, but this was the easiest option and it nearly identically matches what PlanetSide was doing for crypto (discovered after over a month of reverse engineering client netcode).
 
 ## Building
 GNU Make and `g++` (GNU C++) required. Builds tested in Debian Jessie, Cygwin with Mingw64, and GNUWin32.
