@@ -1,11 +1,16 @@
 # Common makefile helper file
 
+# Allow overriding prefix for strip separately
+ifndef PREFIX_STRIP_USE
+  PREFIX_STRIP := $(PREFIX)
+endif
+
 # Note - := means expand all and save result, = means expand all each time
 AR := $(PREFIX)ar
 CC := $(PREFIX)gcc
 CXX := $(PREFIX)g++
 LD := $(PREFIX)ld
-STRIP := $(PREFIX)strip
+STRIP := $(PREFIX_STRIP)strip
 
 # Get a good guess as to our compile target
 gcc_machine := $(subst -, ,$(shell $(CC) -dumpmachine))
