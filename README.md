@@ -42,7 +42,7 @@ This will build a `pscrypto.dll` for 64-bit Windows. Platform and architecture q
 You can also specify the `ARCH` variable manually (as `i686` or `x86_64`) in order to enable multilib building, if available.
 
 ## Releasing Code
-You are able to create a release on a Linux 64-bit system with the MingW64 compiler toolchain installed. The prefixes required to build in order to support Windows 32,64 and Linux 64-bit are
+You are able to create a release on a Linux 64-bit system with the MingW64 compiler toolchain installed. The prefixes required to build in order to support Windows 32,64 and Linux 64-bit are (`apt install g++-mingw-w64`):
 
 ```
 x86_64-w64-mingw32-
